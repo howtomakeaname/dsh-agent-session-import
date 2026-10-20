@@ -3,6 +3,8 @@
 ## 0.2.2 — 2026-10-20
 
 - Host 导入服务拆分为 state/jobs/scan 模块，端点错误结构统一。
+- 跨平台支持：应用数据目录按 macOS / Windows / Linux 解析，cwd 使用 `path.isAbsolute`，SQLite 统一优先 `node:sqlite` 并提供 Windows 安全的 `file:` URI 回退。
+- CI 覆盖 ubuntu-latest / macos-latest / windows-latest。
 - 修正来源展示顺序为 Codex、Claude Code、Cursor、ZCode、Kimi，并更新界面预览截图。
 
 ## 0.2.1 — 2026-10-20

@@ -94,7 +94,10 @@ check('generated client bundle is up to date', () => {
   if (expectedClient === null) throw new Error('client bundle build failed');
   const expected = expectedClient;
   const actual = fs.readFileSync(path.join(root, 'lib/client.js'), 'utf8');
-  if (actual !== expected) throw new Error('lib/client.js is stale; run `npm run build:client`');
+  // Git on Windows may check out CRLF; compare line endings normalized.
+  const normalizedActual = actual.replace(/\r\n/g, '\n');
+  const normalizedExpected = expected.replace(/\r\n/g, '\n');
+  if (normalizedActual !== normalizedExpected) throw new Error('lib/client.js is stale; run `npm run build:client`');
   return 'src/client matches lib/client.js';
 });
 

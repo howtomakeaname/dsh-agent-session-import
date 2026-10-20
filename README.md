@@ -125,6 +125,16 @@ npm publish --access public       # 发布到 npm（默认 registry 不可用时
 也可以直接从 Git 仓库安装（DSH 的 Add plugin 支持 git spec）；若要在 Discover 市场出现，需要把
 `dsh-plugin-market-index` 格式的索引 JSON 与图标托管到可公开访问的 URL，让用户添加 index source。
 
+## 平台支持
+
+| 平台 | 状态 |
+| --- | --- |
+| macOS | 已在实机验证 5 个来源的端到端导入（列表、导入、冷读、UI） |
+| Windows / Linux | 路径与 SQLite 访问已跨平台处理：Cursor 使用 `%APPDATA%` / `~/.config`，Codex/Claude Code/ZCode 使用用户目录，cwd 用 `path.isAbsolute` 判定，SQLite CLI 从 PATH 解析；CI 在 `ubuntu-latest` / `macos-latest` / `windows-latest` 跑单元测试与打包检查，**尚未在 Windows 真机用本地数据做导入验证** |
+
+- Kimi 桌面端的会话目录目前按 macOS 路径解析；Windows/Linux 使用 `%APPDATA%`/`XDG_CONFIG_HOME` 做 best-effort 探测，找不到时显示为不可用（其他来源不受影响）。
+- SQLite 访问统一优先走 `node:sqlite`（各平台随 DSH runtime 提供，不依赖预装 sqlite3）；仅在运行时缺少该模块时回退 PATH 上的 `sqlite3`/`sqlite3.exe`，可用 `SQLITE3` 环境变量覆盖。
+
 ## 兼容性
 
 - 在 DSH 0.2.x 上开发与验证（桌面版 0.2.1-rc.2）。
