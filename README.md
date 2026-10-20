@@ -21,6 +21,19 @@
 
 > 截图中的会话标题与项目名已做模糊处理，只用于展示界面布局。
 
+## 项目结构
+
+- `lib/host/` — Host 插件：provider 注册、来源扫描、会话写入与任务编排。
+- `src/client/` — 浏览器端源码：`runtime`、`icons`（品牌图标与侧栏图标）、
+  `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`；
+  构建顺序在 `scripts/build-client.mjs` 的 `ORDER` 中显式声明。
+- `lib/client.js` — 由 `src/client/*.js` 生成的单文件 bundle（DSH client 只加载这个文件，文件头有 generated 标记）。
+
+```bash
+npm run build:client   # 修改 src/client/ 后重新生成 lib/client.js
+npm run check          # bundle 结构与“无本机绝对路径”检查
+```
+
 ## 功能
 
 - 侧边栏 **Import Sessions** 面板：左侧来源导航，右侧会话列表**按项目文件夹分组、可展开/收起**，显示标题、更新时间、消息数和 Imported/Archived 徽标。

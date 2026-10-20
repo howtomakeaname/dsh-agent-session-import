@@ -36,7 +36,8 @@
   },
   "scripts": {
     "check": "node scripts/check-package.mjs",
-    "prepack": "node scripts/check-package.mjs"
+    "prepack": "node scripts/build-client.mjs && node scripts/check-package.mjs",
+    "build:client": "node scripts/build-client.mjs"
   },
   "license": "MIT",
   "dsh": {
