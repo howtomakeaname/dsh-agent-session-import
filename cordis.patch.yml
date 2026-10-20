@@ -1,0 +1,15 @@
+# Bundle patch for dsh-agent-session-import.
+#
+# A bundle patch is a top-level YAML array of loader patch entries applied as
+# one layer over the profile root. This bundle only inserts its own row; the
+# row id is the stable handle later profile/home patch layers can target:
+#
+#   - id: session-import
+#     disabled: true
+#
+# One loader row is both halves: `lib/index.js` is the host plugin and,
+# because package.json declares `dsh.client`, `lib/client.js` is the browser
+# bundle served by dsh-client-modules for that same row.
+- insert:
+    - id: session-import
+      name: dsh-agent-session-import

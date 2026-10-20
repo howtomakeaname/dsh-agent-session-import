@@ -1,0 +1,56 @@
+{
+  "name": "dsh-agent-session-import",
+  "version": "0.2.0",
+  "description": "Import local conversations from Cursor IDE, Codex (CLI/Desktop), Claude Code, ZCode and Kimi into DeepSeek Harness sessions.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "docs",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "session-import",
+    "cursor",
+    "codex",
+    "claude-code",
+    "zcode",
+    "kimi"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "node scripts/check-package.mjs",
+    "prepack": "node scripts/check-package.mjs"
+  },
+  "license": "MIT",
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/howtomakeaname/dsh-agent-session-import.git"
+  },
+  "homepage": "https://github.com/howtomakeaname/dsh-agent-session-import"
+}
