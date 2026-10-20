@@ -2,6 +2,8 @@
 // paths or machine-local counts leak into the published files.
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { buildClientSource } from './build-client.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const failures = [];
@@ -46,6 +48,53 @@ check('client entry contract', () => {
   if (!client.includes('window.__ModuleLoader__.load')) throw new Error('client.js is not a DSH client module');
   if (!client.includes('exports.apply')) throw new Error('client.js does not export apply()');
   return 'ModuleLoader bundle';
+});
+
+check('generated client bundle is up to date', () => {
+  const expected = buildClientSource();
+  const actual = fs.readFileSync(path.join(root, 'lib/client.js'), 'utf8');
+  if (actual !== expected) throw new Error('lib/client.js is stale; run `npm run build:client`');
+  return 'src/client matches lib/client.js';
+});
+
+check('host and client sources parse', () => {
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.js')) files.push(full);
+    }
+  };
+  walk(path.join(root, 'lib'));
+  walk(path.join(root, 'scripts'));
+  for (const file of files) execFileSync(process.execPath, ['--check', file], { stdio: 'pipe' });
+  return `${files.length} files`;
+});
+
+check('readme screenshot exists', () => {
+  const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
+  const match = readme.match(/\(docs\/screenshots\/([^)]+)\)/);
+  if (match === null) throw new Error('README does not reference docs/screenshots');
+  if (!fs.existsSync(path.join(root, 'docs/screenshots', match[1]))) throw new Error(`missing docs/screenshots/${match[1]}`);
+  return match[1];
+});
+
+check('no leftover TODO/FIXME markers', () => {
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (/\.(md|js|json|yml)$/.test(entry.name)) files.push(full);
+    }
+  };
+  walk(path.join(root, 'lib'));
+  walk(path.join(root, 'src'));
+  walk(path.join(root, 'docs'));
+  const offenders = files.filter((file) => /\b(TODO|FIXME|XXX)\b/.test(fs.readFileSync(file, 'utf8')));
+  if (offenders.length > 0) throw new Error(`markers in ${offenders.map((f) => path.relative(root, f)).join(', ')}`);
+  return `${files.length} files clean`;
 });
 
 check('no machine-specific paths in published files', () => {

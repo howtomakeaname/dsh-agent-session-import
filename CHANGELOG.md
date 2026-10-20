@@ -11,7 +11,7 @@
 
 ## 0.2.0 — 2026-10-20
 
-First public release.
+首个公开版本。
 
 - Sources: Codex (CLI and the Codex app bundled in ChatGPT.app share
   `~/.codex`), Claude Code, Cursor IDE (Agent/Composer), ZCode, and Kimi
