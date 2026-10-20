@@ -11,7 +11,7 @@
 | **Claude Code** | `~/.claude/projects/**.jsonl` |
 | **Cursor IDE**（Agent / Composer） | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` |
 | **ZCode** | `~/.zcode/cli/db/db.sqlite` |
-| **Kimi**（Agent / Kimi Code） | `~/Library/Application Support/kimi-desktop/.../kimi-code/home/sessions` |
+| **Kimi**（Kimi Code CLI / 桌面端） | `~/.kimi-code/sessions`（Windows：`%USERPROFILE%\.kimi-code\sessions`，可用 `KIMI_CODE_HOME` 覆盖；macOS 另含桌面端 runtime 路径） |
 
 其他 agent（Aider、Continue……）只需新增一个 provider 文件，见 [docs/adding-provider.md](docs/adding-provider.md)。
 
@@ -132,7 +132,7 @@ npm publish --access public       # 发布到 npm（默认 registry 不可用时
 | macOS | 已在实机验证 5 个来源的端到端导入（列表、导入、冷读、UI） |
 | Windows / Linux | 路径与 SQLite 访问已跨平台处理：Cursor 使用 `%APPDATA%` / `~/.config`，Codex/Claude Code/ZCode 使用用户目录，cwd 用 `path.isAbsolute` 判定，SQLite CLI 从 PATH 解析；CI 在 `ubuntu-latest` / `macos-latest` / `windows-latest` 跑单元测试与打包检查，**尚未在 Windows 真机用本地数据做导入验证** |
 
-- Kimi 桌面端的会话目录目前按 macOS 路径解析；Windows/Linux 使用 `%APPDATA%`/`XDG_CONFIG_HOME` 做 best-effort 探测，找不到时显示为不可用（其他来源不受影响）。
+- Kimi Code CLI 会话按 `KIMI_CODE_HOME` / `~/.kimi-code/sessions` 读取，macOS/Windows/Linux 均支持；Kimi 桌面端内置 runtime 的路径目前按 macOS 解析，其他平台找不到时仅这部分不可用。
 - SQLite 访问统一优先走 `node:sqlite`（各平台随 DSH runtime 提供，不依赖预装 sqlite3）；仅在运行时缺少该模块时回退 PATH 上的 `sqlite3`/`sqlite3.exe`，可用 `SQLITE3` 环境变量覆盖。
 
 ## 兼容性
