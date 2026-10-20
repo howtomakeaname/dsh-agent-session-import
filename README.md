@@ -23,7 +23,11 @@
 
 ## 项目结构
 
-- `lib/host/` — Host 插件：provider 注册、来源扫描、会话写入与任务编排。
+- `lib/host/` — Host 插件：
+  `service.js`（端点编排与导入任务）、`scan.js`（来源扫描缓存）、
+  `jobs.js`（任务进度/取消/保留窗口）、`state.js`（已导入映射持久化）、
+  `writer.js`（DSH v4 会话写入）、`cursor-store.js` + `convert.js`（Cursor 读取）、
+  `providers/`（各来源 provider 与注册表）。
 - `src/client/` — 真正的 ES module 源码：`runtime`、`icons`（品牌图标与侧栏图标）、
   `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`、`index`；
   由 esbuild（devDependency）打包成单一 bundle，平台模块保持 external。

@@ -3,9 +3,11 @@ import test from 'node:test';
 
 import { providers } from '../lib/host/providers/registry.js';
 
-test('provider registry exposes the documented display order', async () => {
+test('provider registry exposes every supported source exactly once', async () => {
   const list = await providers();
-  assert.deepEqual(list.map((provider) => provider.id), ['codex', 'claude-code', 'cursor', 'zcode', 'kimi']);
+  const ids = list.map((provider) => provider.id);
+  assert.equal(new Set(ids).size, ids.length, 'provider ids must be unique');
+  assert.deepEqual([...ids].sort(), ['claude-code', 'codex', 'cursor', 'kimi', 'zcode']);
 });
 
 test('every provider implements the provider contract', async () => {

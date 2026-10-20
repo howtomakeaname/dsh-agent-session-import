@@ -164,8 +164,10 @@ check('no machine-specific paths in published files', () => {
 });
 
 check('import state directory naming', () => {
-  const service = fs.readFileSync(path.join(root, 'lib/host/service.js'), 'utf8');
-  if (!service.includes("'session-import'")) throw new Error('import state path is not namespaced under session-import');
+  const state = fs.readFileSync(path.join(root, 'lib/host/state.js'), 'utf8');
+  if (!state.includes("'session-import'") || !state.includes('imported.json')) {
+    throw new Error('import state path is not namespaced under session-import/imported.json');
+  }
   return 'state namespaced';
 });
 
