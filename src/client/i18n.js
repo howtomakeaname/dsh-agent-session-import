@@ -1,5 +1,5 @@
     // ── copy ────────────────────────────────────────────────────────────────
-    const zh = {
+export const zh = {
       panel: '导入会话',
       title: '导入会话',
       subtitle: '从本机第三方 agent 导入对话到 DeepSeek Harness。',
@@ -56,7 +56,7 @@
       groupCount: '{n} 条对话',
       groupImported: '{n} 已导入',
     };
-    const en = {
+export const en = {
       panel: 'Import Sessions',
       title: 'Import Sessions',
       subtitle: 'Import local agent history into DeepSeek Harness.',

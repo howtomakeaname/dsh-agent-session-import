@@ -24,14 +24,16 @@
 ## 项目结构
 
 - `lib/host/` — Host 插件：provider 注册、来源扫描、会话写入与任务编排。
-- `src/client/` — 浏览器端源码：`runtime`、`icons`（品牌图标与侧栏图标）、
-  `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`；
-  构建顺序在 `scripts/build-client.mjs` 的 `ORDER` 中显式声明。
+- `src/client/` — 真正的 ES module 源码：`runtime`、`icons`（品牌图标与侧栏图标）、
+  `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`、`index`；
+  由 esbuild（devDependency）打包成单一 bundle，平台模块保持 external。
 - `lib/client.js` — 由 `src/client/*.js` 生成的单文件 bundle（DSH client 只加载这个文件，文件头有 generated 标记）。
 
 ```bash
+npm install            # 安装 esbuild 等开发依赖（运行时仍然零依赖）
 npm run build:client   # 修改 src/client/ 后重新生成 lib/client.js
-npm run check          # bundle 结构与“无本机绝对路径”检查
+npm test               # 单元测试（writer 两种模式、provider 注册顺序/契约）
+npm run check          # bundle 是否最新、语法、README 截图、绝对路径等
 ```
 
 ## 功能

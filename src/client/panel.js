@@ -1,6 +1,15 @@
+import * as react from 'react';
+import * as P from '@deepseek-ai/dsh-client-ui-primitives';
+import { IconChevronDown, IconChevronRight, IconSearch, primitivesAvailable } from './runtime.js';
+import { fmt, formatTime } from './utils.js';
+import { SOURCE_ICONS } from './icons.js';
+import { Badge, ConversationRow, ProgressBar, ImportModal } from './components.js';
+
+const h = react.createElement;
+
     // ── panel page ──────────────────────────────────────────────────────────
     /** The full import page: pick a source, scan, select, import, review. */
-    function SessionImportPanel(props) {
+    export function SessionImportPanel(props) {
       const { t, rpc, refreshSessions } = props;
       const [list, setList] = react.useState({ phase: 'loading', data: null, error: null });
       const [selected, setSelected] = react.useState(() => new Set());

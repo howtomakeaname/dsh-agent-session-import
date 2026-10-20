@@ -3,9 +3,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import vm from 'node:vm';
 import { buildClientSource } from './build-client.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
+const expectedClient = await buildClientSource().catch((error) => {
+  console.error(`FAIL generated client bundle — ${error instanceof Error ? error.message : String(error)}`);
+  process.exitCode = 1;
+  return null;
+});
 const failures = [];
 const checks = [];
 
@@ -46,12 +52,47 @@ check('bundle patch entry', () => {
 check('client entry contract', () => {
   const client = fs.readFileSync(path.join(root, 'lib/client.js'), 'utf8');
   if (!client.includes('window.__ModuleLoader__.load')) throw new Error('client.js is not a DSH client module');
-  if (!client.includes('exports.apply')) throw new Error('client.js does not export apply()');
-  return 'ModuleLoader bundle';
+
+  let definition = null;
+  const sandbox = {
+    window: { __ModuleLoader__: { load: (value) => { definition = value; } } },
+    document: {
+      querySelector: () => null,
+      createElement: () => ({ dataset: {}, style: {}, appendChild() {} }),
+      head: { appendChild() {} },
+    },
+  };
+  vm.createContext(sandbox);
+  vm.runInContext(client, sandbox);
+  if (definition === null) throw new Error('factory was not registered');
+
+  const elementStub = () => ({ type: 'div', props: {} });
+  const react = {
+    createElement: elementStub,
+    Fragment: 'Fragment',
+    useState: () => [null, () => {}],
+    useEffect: () => {},
+    useCallback: (fn) => fn,
+    useMemo: (fn) => fn(),
+    useRef: () => ({ current: null }),
+  };
+  const primitives = new Proxy({}, { get: () => elementStub });
+  const exportsObj = definition.factory((name) => {
+    if (name === 'react') return react;
+    if (name === 'react/jsx-runtime') return { jsx: elementStub, jsxs: elementStub };
+    if (name === '@deepseek-ai/dsh-client-ui-primitives') return primitives;
+    throw new Error(`unexpected platform module: ${name}`);
+  });
+  for (const key of ['NS', 'PANEL_ID', 'inject', 'apply']) {
+    if (exportsObj[key] === undefined) throw new Error(`missing export ${key}`);
+  }
+  if (typeof exportsObj.apply !== 'function') throw new Error('apply is not a function');
+  return 'factory exports NS/PANEL_ID/inject/apply';
 });
 
 check('generated client bundle is up to date', () => {
-  const expected = buildClientSource();
+  if (expectedClient === null) throw new Error('client bundle build failed');
+  const expected = expectedClient;
   const actual = fs.readFileSync(path.join(root, 'lib/client.js'), 'utf8');
   if (actual !== expected) throw new Error('lib/client.js is stale; run `npm run build:client`');
   return 'src/client matches lib/client.js';

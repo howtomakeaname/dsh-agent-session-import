@@ -1,14 +1,21 @@
+import * as react from 'react';
+import * as P from '@deepseek-ai/dsh-client-ui-primitives';
+import { primitivesAvailable } from './runtime.js';
+import { fmt, formatTime } from './utils.js';
+
+const h = react.createElement;
+
     // ── small components ────────────────────────────────────────────────────
 
     /** A small status chip: the harness Tag when available. */
-    function Badge(props) {
+    export function Badge(props) {
       const tone = props.tone === 'ok' ? 'success' : props.tone === 'warn' ? 'warning' : 'neutral';
       if (primitivesAvailable.Tag) return h(P.Tag, { tone }, props.children);
       return h('span', { className: 'ci-badge' + (props.tone ? ' ' + props.tone : '') }, props.children);
     }
 
     /** One selectable conversation row. */
-    function ConversationRow(props) {
+    export function ConversationRow(props) {
       const { item, checked, onToggle, t, nested } = props;
       const rowKey = typeof item.key === 'string' ? item.key : `${item.source ?? 'cursor'}:${item.id}`;
       const meta = [
@@ -44,7 +51,7 @@
     }
 
     /** Simple determinate progress bar. */
-    function ProgressBar(props) {
+    export function ProgressBar(props) {
       const total = props.total > 0 ? props.total : 0;
       const done = Math.max(0, Math.min(props.done, total));
       const percent = total === 0 ? (props.finished ? 100 : 0) : Math.round((done / total) * 100);
@@ -63,7 +70,7 @@
     }
 
     /** Import progress + result modal. */
-    function ImportModal(props) {
+    export function ImportModal(props) {
       const { t, open, status, cancelling, onClose, onCancel, onRetryFailed, labels } = props;
       if (!open) return null;
       const running = status === null || status.state === 'running';

@@ -37,7 +37,8 @@
   "scripts": {
     "check": "node scripts/check-package.mjs",
     "prepack": "node scripts/build-client.mjs && node scripts/check-package.mjs",
-    "build:client": "node scripts/build-client.mjs"
+    "build:client": "node scripts/build-client.mjs",
+    "test": "node --test test/*.test.mjs"
   },
   "license": "MIT",
   "dsh": {
@@ -53,5 +54,8 @@
     "type": "git",
     "url": "git+https://github.com/howtomakeaname/dsh-agent-session-import.git"
   },
-  "homepage": "https://github.com/howtomakeaname/dsh-agent-session-import"
+  "homepage": "https://github.com/howtomakeaname/dsh-agent-session-import",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
 }

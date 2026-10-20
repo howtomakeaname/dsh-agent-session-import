@@ -1,5 +1,5 @@
     // ── styles ──────────────────────────────────────────────────────────────
-    const CSS = [
+export const CSS = [
       '.ci-page{display:flex;flex-direction:column;height:100%;min-height:0;padding:24px 28px 18px;gap:14px;color:var(--dsw-alias-label-primary,#1f2329)}',
       '.ci-layout{display:flex;gap:16px;flex:1;min-height:0;overflow:hidden}',
       '.ci-rail{width:224px;flex-shrink:0;display:flex;flex-direction:column;gap:2px;overflow:auto;padding:2px}',
@@ -81,11 +81,15 @@
       '.ci-hint{font-size:12px;line-height:18px;color:var(--dsw-alias-label-tertiary,#8a919c)}',
     ].join('\n');
 
-    const CSS_TAG_ID = 'dsh-agent-session-import/panel.css';
-    if (typeof document !== 'undefined' && document.querySelector('style[data-plugin-css=' + JSON.stringify(CSS_TAG_ID) + ']') === null) {
-      const tag = document.createElement('style');
-      tag.dataset.plugin = 'dsh-agent-session-import';
-      tag.dataset.pluginCss = CSS_TAG_ID;
-      tag.textContent = CSS;
-      document.head.appendChild(tag);
-    }
+export const CSS_TAG_ID = 'dsh-agent-session-import/panel.css';
+
+/** Attach the panel stylesheet once per document. */
+export function injectStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.querySelector(`style[data-plugin-css="${CSS_TAG_ID}"]`) !== null) return;
+  const tag = document.createElement('style');
+  tag.dataset.plugin = 'dsh-agent-session-import';
+  tag.dataset.pluginCss = CSS_TAG_ID;
+  tag.textContent = CSS;
+  document.head.appendChild(tag);
+}

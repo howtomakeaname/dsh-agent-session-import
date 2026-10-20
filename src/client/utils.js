@@ -1,10 +1,12 @@
-    function fmt(text, params) {
+import { ROUTE_PREFIX } from './runtime.js';
+
+    export function fmt(text, params) {
       if (params === undefined) return text;
       return text.replace(/\{(\w+)\}/g, (whole, key) => (params[key] === undefined ? whole : String(params[key])));
     }
 
     /** Format a millisecond timestamp as a compact local date-time. */
-    function formatTime(value) {
+    export function formatTime(value) {
       if (typeof value !== 'number' || !Number.isFinite(value)) return '';
       try {
         const d = new Date(value);
@@ -23,7 +25,7 @@
      * @param endpoint - endpoint name registered by the Host half.
      * @returns absolute URL string.
      */
-    function endpointUrl(endpoint) {
+    export function endpointUrl(endpoint) {
       const base = typeof document !== 'undefined' && typeof document.baseURI === 'string' ? document.baseURI : 'http://localhost/';
       return new URL(`${ROUTE_PREFIX.replace(/^\/+/, '')}/${endpoint}`, base).toString();
     }
@@ -34,7 +36,7 @@
      * @param payload - JSON payload.
      * @returns the endpoint value.
      */
-    async function rpcCall(endpoint, payload) {
+    export async function rpcCall(endpoint, payload) {
       const response = await fetch(endpointUrl(endpoint), {
         method: 'POST',
         // The custom header lets the Host route distinguish this same-origin
