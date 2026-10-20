@@ -7,9 +7,9 @@
 
 | 来源 | 读取的本地数据（只读） |
 | --- | --- |
-| **Cursor IDE**（Agent / Composer） | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` |
 | **Codex**（CLI / 桌面版共用同一存储） | `~/.codex/sessions/**.jsonl` + `~/.codex/thread_history_1.sqlite` |
 | **Claude Code** | `~/.claude/projects/**.jsonl` |
+| **Cursor IDE**（Agent / Composer） | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` |
 | **ZCode** | `~/.zcode/cli/db/db.sqlite` |
 | **Kimi**（Agent / Kimi Code） | `~/Library/Application Support/kimi-desktop/.../kimi-code/home/sessions` |
 
@@ -41,7 +41,7 @@
 
    ```
    dsh-agent-session-import
-   dsh-agent-session-import@0.2.0
+   dsh-agent-session-import@0.2.1
    ```
 
 3. Install → 完成后点 **Enable now**（或到 Plugins 列表启用）。

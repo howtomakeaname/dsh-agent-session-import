@@ -1,12 +1,17 @@
 # Changelog
 
+## 0.2.1 — 2026-10-20
+
+- 精简来源列表，仅保留开源工具的本地历史导入。
+- 首次进入导入面板时显示加载状态（spinner + skeleton 占位），避免空白等待。
+
 ## 0.2.0 — 2026-10-20
 
 First public release.
 
-- Sources: Cursor IDE (Agent/Composer), Codex (CLI and the Codex app bundled in
-  ChatGPT.app share `~/.codex`), Claude Code, ZCode, Kimi (Agent/Kimi Code),
-  and Kimi.
+- Sources: Codex (CLI and the Codex app bundled in ChatGPT.app share
+  `~/.codex`), Claude Code, Cursor IDE (Agent/Composer), ZCode, and Kimi
+  (Agent/Kimi Code).
 - Sidebar panel with a source rail, conversations grouped by project folder,
   search, Unimported/All filter, group-level selection and a progress/results
   dialog with retry for failed imports.

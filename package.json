@@ -1,7 +1,7 @@
 {
   "name": "dsh-agent-session-import",
-  "version": "0.2.0",
-  "description": "Import local conversations from Cursor IDE, Codex (CLI/Desktop), Claude Code, ZCode and Kimi into DeepSeek Harness sessions.",
+  "version": "0.2.1",
+  "description": "Import local conversations from Codex (CLI/Desktop), Claude Code, Cursor IDE, ZCode and Kimi into DeepSeek Harness sessions.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

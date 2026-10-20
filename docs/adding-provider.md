@@ -7,14 +7,15 @@
 ## 1. 目录与注册
 
 provider 放在 `lib/host/providers/<id>.js`，然后在 `lib/host/providers/registry.js` 的
-`OPTIONAL_PROVIDERS` 里加一行：
+`PROVIDER_ORDER` 里加一行（数组顺序就是面板里的来源顺序）：
 
 ```js
-const OPTIONAL_PROVIDERS = [
-  { name: 'codex', module: './codex.js' },
-  { name: 'claude-code', module: './claude-code.js' },
-  { name: 'zcode', module: './zcode.js' },
-  { name: 'kimi', module: './kimi.js' },
+const PROVIDER_ORDER = [
+  { id: 'codex', module: './codex.js' },
+  { id: 'claude-code', module: './claude-code.js' },
+  { id: 'cursor', module: cursor },
+  { id: 'zcode', module: './zcode.js' },
+  { id: 'kimi', module: './kimi.js' },
   // ← 新增来源在这里加一行
 ];
 ```
