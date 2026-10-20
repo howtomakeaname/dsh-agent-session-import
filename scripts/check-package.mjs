@@ -37,6 +37,7 @@ check('bundle patch entry', () => {
   const patch = fs.readFileSync(path.join(root, 'cordis.patch.yml'), 'utf8');
   if (!patch.includes('session-import')) throw new Error('cordis.patch.yml does not declare the session-import row');
   if (!patch.includes(pkg.name)) throw new Error(`cordis.patch.yml does not reference package name ${pkg.name}`);
+  if (/^\s*name:\s*@/m.test(patch)) throw new Error('scoped package names must be quoted in cordis.patch.yml');
   return 'patch rows reference the package';
 });
 

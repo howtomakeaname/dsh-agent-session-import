@@ -12,4 +12,4 @@
 # bundle served by dsh-client-modules for that same row.
 - insert:
     - id: session-import
-      name: dsh-agent-session-import
+      name: "dsh-agent-session-import"

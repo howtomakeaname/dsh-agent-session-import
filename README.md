@@ -41,7 +41,7 @@
 
    ```
    dsh-agent-session-import
-   dsh-agent-session-import@0.2.1
+   dsh-agent-session-import@0.2.2
    ```
 
 3. Install → 完成后点 **Enable now**（或到 Plugins 列表启用）。
