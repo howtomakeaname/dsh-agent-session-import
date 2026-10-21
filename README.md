@@ -60,7 +60,7 @@ npm run check          # bundle 是否最新、语法、README 截图、绝对�
 
    ```
    dsh-agent-session-import
-   dsh-agent-session-import@0.2.2
+   dsh-agent-session-import@0.2.4
    ```
 
 3. Install → 完成后点 **Enable now**（或到 Plugins 列表启用）。
