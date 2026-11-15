@@ -1,5 +1,7 @@
 # dsh-agent-session-import
 
+[简体中文](README.md) | [English](README.en.md)
+
 [![npm version](https://img.shields.io/npm/v/dsh-agent-session-import.svg)](https://www.npmjs.com/package/dsh-agent-session-import)
 [![npm weekly downloads](https://img.shields.io/npm/dw/dsh-agent-session-import.svg)](https://www.npmjs.com/package/dsh-agent-session-import)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -19,45 +21,9 @@
 
 其他 agent（Aider、Continue……）只需新增一个 provider 文件，见 [docs/adding-provider.md](docs/adding-provider.md)。
 
-## 界面预览
-
-![导入面板（会话标题与项目名已模糊处理）](docs/screenshots/import-panel.png)
-
-> 截图中的会话标题与项目名已做模糊处理，只用于展示界面布局。
-
-## 项目结构
-
-- `lib/host/` — Host 插件：
-  `service.js`（端点编排与导入任务）、`scan.js`（来源扫描缓存）、
-  `jobs.js`（任务进度/取消/保留窗口）、`state.js`（已导入映射持久化）、
-  `writer.js`（DSH v4 会话写入）、`cursor-store.js` + `convert.js`（Cursor 读取）、
-  `providers/`（各来源 provider 与注册表）。
-- `src/client/` — 真正的 ES module 源码：`runtime`、`icons`（品牌图标与侧栏图标）、
-  `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`、`index`；
-  由 esbuild（devDependency）打包成单一 bundle，平台模块保持 external。
-- `lib/client.js` — 由 `src/client/*.js` 生成的单文件 bundle（DSH client 只加载这个文件，文件头有 generated 标记）。
-
-```bash
-npm install            # 安装 esbuild 等开发依赖（运行时仍然零依赖）
-npm run build:client   # 修改 src/client/ 后重新生成 lib/client.js
-npm test               # 单元测试（writer 两种模式、provider 注册顺序/契约）
-npm run check          # bundle 是否最新、语法、README 截图、绝对路径等
-```
-
-## 功能
-
-- 侧边栏 **Import Sessions** 面板：左侧来源导航，右侧会话列表**按项目文件夹分组、可展开/收起**，显示标题、更新时间、消息数和 Imported/Archived 徽标。
-- 支持搜索、`Unimported / All` 范围切换、组级全选、Select unimported、逐条勾选；导入弹窗展示总进度、当前条目、逐条结果，失败项可重试。
-- 两种导入模式（**内容都不丢**，区别只在展示与请求结构）：
-  - **Faithful**：思考、工具调用与结果保留为结构化卡片，最适合阅读；续聊时可能受模型 API 对历史 `tool_use`/`thinking` 的校验限制。
-  - **Resume-safe**：同样的内容以文本保留（`【思考】` / `[工具调用]` / `[工具结果]`），去掉 tool/thinking wire 结构，任何模型都能安全继续对话。
-- 一条来源对话 → 一条 DSH 会话，尽量回到原项目目录（目录不存在时回退到用户 home）。
-- 会话标题与消息数写入 DSH 投影缓存，导入后侧边栏直接可见。
-- 已导入记录保存在 `$DSH_HOME/session-import/imported.json`，重复导入会显示徽标；导入结束后列表自动刷新。
-
 ## 安装
 
-### 从 npm 安装（发布后可用）
+### 从 npm 安装
 
 1. 打开 DSH 侧边栏 **Plugins**。
 2. **Add plugin** → 输入包名（或带版本）：
@@ -89,6 +55,42 @@ npm run check          # bundle 是否最新、语法、README 截图、绝对�
 1. 侧边栏点 **Import Sessions**。
 2. 左侧选来源 → 展开项目分组 → 勾选要导入的对话（或 Select unimported）→ 选模式 → **Import**。
 3. 进度弹窗里查看每条结果；完成的会话会出现在左侧会话列表中（归入对应工作区分组）。
+
+## 功能
+
+- 侧边栏 **Import Sessions** 面板：左侧来源导航，右侧会话列表**按项目文件夹分组、可展开/收起**，显示标题、更新时间、消息数和 Imported/Archived 徽标。
+- 支持搜索、`Unimported / All` 范围切换、组级全选、Select unimported、逐条勾选；导入弹窗展示总进度、当前条目、逐条结果，失败项可重试。
+- 两种导入模式（**内容都不丢**，区别只在展示与请求结构）：
+  - **Faithful**：思考、工具调用与结果保留为结构化卡片，最适合阅读；续聊时可能受模型 API 对历史 `tool_use`/`thinking` 的校验限制。
+  - **Resume-safe**：同样的内容以文本保留（`【思考】` / `[工具调用]` / `[工具结果]`），去掉 tool/thinking wire 结构，任何模型都能安全继续对话。
+- 一条来源对话 → 一条 DSH 会话，尽量回到原项目目录（目录不存在时回退到用户 home）。
+- 会话标题与消息数写入 DSH 投影缓存，导入后侧边栏直接可见。
+- 已导入记录保存在 `$DSH_HOME/session-import/imported.json`，重复导入会显示徽标；导入结束后列表自动刷新。
+
+## 界面预览
+
+![导入面板（会话标题与项目名已模糊处理）](docs/screenshots/import-panel.png)
+
+> 截图中的会话标题与项目名已做模糊处理，只用于展示界面布局。
+
+## 项目结构
+
+- `lib/host/` — Host 插件：
+  `service.js`（端点编排与导入任务）、`scan.js`（来源扫描缓存）、
+  `jobs.js`（任务进度/取消/保留窗口）、`state.js`（已导入映射持久化）、
+  `writer.js`（DSH v4 会话写入）、`cursor-store.js` + `convert.js`（Cursor 读取）、
+  `providers/`（各来源 provider 与注册表）。
+- `src/client/` — 真正的 ES module 源码：`runtime`、`icons`（品牌图标与侧栏图标）、
+  `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`、`index`；
+  由 esbuild（devDependency）打包成单一 bundle，平台模块保持 external。
+- `lib/client.js` — 由 `src/client/*.js` 生成的单文件 bundle（DSH client 只加载这个文件，文件头有 generated 标记）。
+
+```bash
+npm install            # 安装 esbuild 等开发依赖（运行时仍然零依赖）
+npm run build:client   # 修改 src/client/ 后重新生成 lib/client.js
+npm test               # 单元测试（writer 两种模式、provider 注册顺序/契约）
+npm run check          # bundle 是否最新、语法、README 截图、绝对路径等
+```
 
 ## 会话头部与来源说明
 
