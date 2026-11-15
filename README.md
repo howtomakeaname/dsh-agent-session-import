@@ -1,5 +1,9 @@
 # dsh-agent-session-import
 
+[![npm version](https://img.shields.io/npm/v/dsh-agent-session-import.svg)](https://www.npmjs.com/package/dsh-agent-session-import)
+[![npm weekly downloads](https://img.shields.io/npm/dw/dsh-agent-session-import.svg)](https://www.npmjs.com/package/dsh-agent-session-import)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 把 **第三方 coding agent 的本地对话记录**导入为 **DeepSeek Harness（DSH）会话**。
 一个可安装的 DSH bundle 插件：host 侧只读各 agent 的本地数据，浏览器侧提供导入面板；零运行时依赖、无需构建。
 
