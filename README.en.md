@@ -5,6 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/dsh-agent-session-import.svg)](https://www.npmjs.com/package/dsh-agent-session-import)
 [![npm weekly downloads](https://img.shields.io/npm/dw/dsh-agent-session-import.svg)](https://www.npmjs.com/package/dsh-agent-session-import)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Listed on dsh-plugin.org](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/howtomakeaname/dsh-agent-session-import)
 
 Import **local conversation history from third-party coding agents** into **DeepSeek Harness (DSH)** sessions.
 An installable DSH bundle plugin: the host reads each agent's local data read-only, while the browser side provides the import panel. Zero runtime dependencies; no build step required.
