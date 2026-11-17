@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.2.5 — 2026-11-17
 
-- Cursor: decode the composer format version from `_v`; keep V3+ `toolFormerData` support and add V1 `capabilities[].data.bubbleDataMap` fallback. Accept Cursor 3.30 `/t:` and `/s:` sub-bubble records, and add conversion tests for both layouts.
+- Cursor: support Cursor 3.30's current composer storage and the newer `~/.cursor/projects/**/agent-transcripts/*.jsonl` store as one Cursor source.
+- Cursor composer formats: decode `_v`, keep V3+ `toolFormerData`, and add V1 `capabilities[].data.bubbleDataMap` fallback (object and JSON-string forms).
+- Cursor 3.30 `/t:` and `/s:` sub-bubble records are read; sub-bubble conversations no longer report a fake zero message count.
+- Cursor agent transcripts are parsed and listed; tool inputs are preserved as text because the transcript store has no tool results.
+- Added Cursor V1/V3/sub-bubble and agent transcript tests (32 tests total); verified real Cursor 3.30.14 composer and transcript imports through an isolated DSH instance.
 
 ## 0.2.4 — 2026-10-21
 

@@ -16,7 +16,7 @@ Supported sources:
 | --- | --- |
 | **Codex** (CLI and desktop share the same store) | `~/.codex/sessions/**.jsonl` + `~/.codex/thread_history_1.sqlite` |
 | **Claude Code** | `~/.claude/projects/**.jsonl` |
-| **Cursor IDE** (Agent / Composer) | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` |
+| **Cursor IDE** (Agent / Composer) | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` + `~/.cursor/projects/**/agent-transcripts/*.jsonl` |
 | **ZCode** | `~/.zcode/cli/db/db.sqlite` |
 | **Kimi** (Kimi Code CLI / desktop) | `~/.kimi-code/sessions` (Windows: `%USERPROFILE%\.kimi-code\sessions`; override with `KIMI_CODE_HOME`; macOS also covers the desktop runtime path) |
 
@@ -31,7 +31,7 @@ Other agents (Aider, Continue, …) only need a new provider file. See [docs/add
 
    ```
    dsh-agent-session-import
-   dsh-agent-session-import@0.2.4
+   dsh-agent-session-import@0.2.5
    ```
 
 3. Click **Install**, then **Enable now** when installation finishes (or enable it from the Plugins list).
@@ -79,7 +79,7 @@ To uninstall: **Plugins → the plugin → Uninstall**. Uninstalling does not de
 - `lib/host/` — host-side plugin:
   `service.js` (endpoint orchestration and import jobs), `scan.js` (source scan cache),
   `jobs.js` (progress/cancel/retention window), `state.js` (persisted imported mapping),
-  `writer.js` (DSH v4 session writer), `cursor-store.js` + `convert.js` (Cursor reader),
+  `writer.js` (DSH v4 session writer), `cursor-store.js` + `cursor-transcripts.js` + `convert.js` (Cursor reader),
   `providers/` (source providers and registry).
 - `src/client/` — the actual ES module source: `runtime`, `icons` (brand and sidebar icons),
   `styles` (CSS), `i18n` (dictionaries), `utils`, `components`, `panel`, `apply`, `index`.
@@ -104,7 +104,7 @@ npm run check          # bundle freshness, syntax, README screenshot, absolute p
 - **Codex**: the full reasoning chain is not persisted in plain text; only the visible summary is available locally. The desktop and CLI share `~/.codex`, and both are covered.
 - **Kimi**: only Kimi Agent / Kimi Code sessions are supported; ordinary Kimi chats live on the server, so their content is not available locally.
 - **ZCode**: the schema is tied to ZCode 0.16.x; rewind sessions are imported as linear history.
-- **Cursor**: the reader follows the on-disk composer format rather than a hard-coded app version. V1 (`_v < 3`) reads tool payloads from `composerData.capabilities[].data.bubbleDataMap`; V3+ (`_v >= 3`) reads `toolFormerData` on each bubble. Cursor 3.30 `/t:` / `/s:` sub-records are read as messages. The separate Cursor 3.30 Agents Window / CLI transcript store under `~/.cursor/projects/**/agent-transcripts/*.jsonl` is not imported yet.
+- **Cursor**: the reader follows the on-disk composer format rather than a hard-coded app version. V1 (`_v < 3`) reads tool payloads from `composerData.capabilities[].data.bubbleDataMap`; V3+ (`_v >= 3`) reads `toolFormerData` on each bubble. Cursor 3.30 `/t:` / `/s:` sub-records are read as messages. Cursor 3.30 Agents Window / CLI transcripts under `~/.cursor/projects/**/agent-transcripts/*.jsonl` are scanned too; that store records tool inputs but no tool results, so tool uses are preserved as text rather than inventing result events.
 - Tool results larger than 20,000 characters and thinking blocks larger than 12,000 characters are truncated and annotated.
 - Very large histories are read in pages; individual corrupt lines are skipped and counted.
 - In Faithful mode, the model service may validate foreign `tool_use` / thinking events in the history when continuing. Use Resume-safe for reliable continuation.
@@ -143,7 +143,7 @@ The plugin can also be installed directly from Git (DSH's Add plugin supports Gi
 ## Compatibility
 
 - Developed and verified on DSH 0.2.x (desktop 0.2.1-rc.2).
-- The Cursor reader has been exercised against the composer store of Cursor 3.30.14 stable; both V1 and V3 tool-data layouts are covered by unit tests.
+- The Cursor reader has been exercised against both the composer store and the agent transcript store of Cursor 3.30.14 stable; list, import, and DSH session writes were verified, and V1/V3 tool-data layouts are covered by unit tests.
 - The package has zero runtime dependencies. The host side uses Node built-ins, and the browser side reuses static DSH platform modules such as `@deepseek-ai/dsh-client-ui-primitives`.
 
 ## License

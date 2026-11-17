@@ -16,7 +16,7 @@
 | --- | --- |
 | **Codex**（CLI / 桌面版共用同一存储） | `~/.codex/sessions/**.jsonl` + `~/.codex/thread_history_1.sqlite` |
 | **Claude Code** | `~/.claude/projects/**.jsonl` |
-| **Cursor IDE**（Agent / Composer） | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` |
+| **Cursor IDE**（Agent / Composer） | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` + `~/.cursor/projects/**/agent-transcripts/*.jsonl` |
 | **ZCode** | `~/.zcode/cli/db/db.sqlite` |
 | **Kimi**（Kimi Code CLI / 桌面端） | `~/.kimi-code/sessions`（Windows：`%USERPROFILE%\.kimi-code\sessions`，可用 `KIMI_CODE_HOME` 覆盖；macOS 另含桌面端 runtime 路径） |
 
@@ -31,7 +31,7 @@
 
    ```
    dsh-agent-session-import
-   dsh-agent-session-import@0.2.4
+   dsh-agent-session-import@0.2.5
    ```
 
 3. Install → 完成后点 **Enable now**（或到 Plugins 列表启用）。
@@ -79,7 +79,7 @@
 - `lib/host/` — Host 插件：
   `service.js`（端点编排与导入任务）、`scan.js`（来源扫描缓存）、
   `jobs.js`（任务进度/取消/保留窗口）、`state.js`（已导入映射持久化）、
-  `writer.js`（DSH v4 会话写入）、`cursor-store.js` + `convert.js`（Cursor 读取）、
+  `writer.js`（DSH v4 会话写入）、`cursor-store.js` + `cursor-transcripts.js` + `convert.js`（Cursor 读取）、
   `providers/`（各来源 provider 与注册表）。
 - `src/client/` — 真正的 ES module 源码：`runtime`、`icons`（品牌图标与侧栏图标）、
   `styles`（CSS）、`i18n`（字典）、`utils`、`components`、`panel`、`apply`、`index`；
@@ -105,7 +105,7 @@ npm run check          # bundle 是否最新、语法、README 截图、绝对�
 - **Codex**：完整 reasoning 链不落明文，本地只保留可见的 summary；桌面版与 CLI 共用 `~/.codex`，已一并覆盖。
 - **Kimi**：只支持 Kimi Agent / Kimi Code 会话；普通 Kimi 聊天记录在服务端，本地没有正文。
 - **ZCode**：schema 绑定 ZCode 0.16.x；rewind 会话按线性历史导入。
-- **Cursor**：按 composer 存储格式适配，而不是按 App 版本硬编码：V1（`_v < 3`）从 `composerData.capabilities[].data.bubbleDataMap` 读取工具数据，V3+（`_v ≥ 3`）从 bubble 的 `toolFormerData` 读取；Cursor 3.30 的 `/t:` / `/s:` 子记录也会作为消息读取。Cursor 3.30 Agents Window / CLI 写入 `~/.cursor/projects/**/agent-transcripts/*.jsonl` 的新 transcript 存储目前尚未纳入导入。
+- **Cursor**：按 composer 存储格式适配，而不是按 App 版本硬编码：V1（`_v < 3`）从 `composerData.capabilities[].data.bubbleDataMap` 读取工具数据，V3+（`_v ≥ 3`）从 bubble 的 `toolFormerData` 读取；Cursor 3.30 的 `/t:` / `/s:` 子记录也会作为消息读取。Cursor 3.30 Agents Window / CLI 的 `~/.cursor/projects/**/agent-transcripts/*.jsonl` 也会扫描；该 transcript 格式只记录工具输入、不记录工具结果，因此工具调用会以文本形式保留，不伪造工具结果事件。
 - 工具结果超过 2 万字符、思考超过 1.2 万字符会截断并标注。
 - 超大历史按页读取；个别损坏行会跳过并计入统计。
 - Faithful 模式续聊时，模型服务可能校验历史中的 foreign `tool_use` / thinking；需要稳定续聊请用 Resume-safe。
@@ -146,7 +146,7 @@ npm publish --access public       # 发布到 npm（默认 registry 不可用时
 ## 兼容性
 
 - 在 DSH 0.2.x 上开发与验证（桌面版 0.2.1-rc.2）。
-- Cursor 侧已在 3.30.14 stable 的 composer 存储上验证列表与单条读取；V1/V3 工具数据两种布局均有单元测试。
+- Cursor 侧已在 3.30.14 stable 的 composer 存储与 agent-transcripts 存储上验证列表、导入和 DSH session 写入；V1/V3 工具数据两种布局均有单元测试。
 - 包本身零运行时依赖；host 侧使用 Node 内置模块，浏览器侧复用 DSH 平台内置的
   `@deepseek-ai/dsh-client-ui-primitives` 等静态模块。
 
