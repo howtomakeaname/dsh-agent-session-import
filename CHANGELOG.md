@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Cursor: decode the composer format version from `_v`; keep V3+ `toolFormerData` support and add V1 `capabilities[].data.bubbleDataMap` fallback. Accept Cursor 3.30 `/t:` and `/s:` sub-bubble records, and add conversion tests for both layouts.
+
 ## 0.2.4 — 2026-10-21
 
 - 重新发布到 npm。0.2.2 已被撤回，0.2.3 被 npm staged placeholder 占用，因此使用 0.2.4 发布。

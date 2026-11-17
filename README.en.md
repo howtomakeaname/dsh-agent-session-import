@@ -103,6 +103,7 @@ npm run check          # bundle freshness, syntax, README screenshot, absolute p
 - **Codex**: the full reasoning chain is not persisted in plain text; only the visible summary is available locally. The desktop and CLI share `~/.codex`, and both are covered.
 - **Kimi**: only Kimi Agent / Kimi Code sessions are supported; ordinary Kimi chats live on the server, so their content is not available locally.
 - **ZCode**: the schema is tied to ZCode 0.16.x; rewind sessions are imported as linear history.
+- **Cursor**: the reader follows the on-disk composer format rather than a hard-coded app version. V1 (`_v < 3`) reads tool payloads from `composerData.capabilities[].data.bubbleDataMap`; V3+ (`_v >= 3`) reads `toolFormerData` on each bubble. Cursor 3.30 `/t:` / `/s:` sub-records are read as messages. The separate Cursor 3.30 Agents Window / CLI transcript store under `~/.cursor/projects/**/agent-transcripts/*.jsonl` is not imported yet.
 - Tool results larger than 20,000 characters and thinking blocks larger than 12,000 characters are truncated and annotated.
 - Very large histories are read in pages; individual corrupt lines are skipped and counted.
 - In Faithful mode, the model service may validate foreign `tool_use` / thinking events in the history when continuing. Use Resume-safe for reliable continuation.
@@ -141,6 +142,7 @@ The plugin can also be installed directly from Git (DSH's Add plugin supports Gi
 ## Compatibility
 
 - Developed and verified on DSH 0.2.x (desktop 0.2.1-rc.2).
+- The Cursor reader has been exercised against the composer store of Cursor 3.30.14 stable; both V1 and V3 tool-data layouts are covered by unit tests.
 - The package has zero runtime dependencies. The host side uses Node built-ins, and the browser side reuses static DSH platform modules such as `@deepseek-ai/dsh-client-ui-primitives`.
 
 ## License

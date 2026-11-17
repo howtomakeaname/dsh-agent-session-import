@@ -104,6 +104,7 @@ npm run check          # bundle 是否最新、语法、README 截图、绝对�
 - **Codex**：完整 reasoning 链不落明文，本地只保留可见的 summary；桌面版与 CLI 共用 `~/.codex`，已一并覆盖。
 - **Kimi**：只支持 Kimi Agent / Kimi Code 会话；普通 Kimi 聊天记录在服务端，本地没有正文。
 - **ZCode**：schema 绑定 ZCode 0.16.x；rewind 会话按线性历史导入。
+- **Cursor**：按 composer 存储格式适配，而不是按 App 版本硬编码：V1（`_v < 3`）从 `composerData.capabilities[].data.bubbleDataMap` 读取工具数据，V3+（`_v ≥ 3`）从 bubble 的 `toolFormerData` 读取；Cursor 3.30 的 `/t:` / `/s:` 子记录也会作为消息读取。Cursor 3.30 Agents Window / CLI 写入 `~/.cursor/projects/**/agent-transcripts/*.jsonl` 的新 transcript 存储目前尚未纳入导入。
 - 工具结果超过 2 万字符、思考超过 1.2 万字符会截断并标注。
 - 超大历史按页读取；个别损坏行会跳过并计入统计。
 - Faithful 模式续聊时，模型服务可能校验历史中的 foreign `tool_use` / thinking；需要稳定续聊请用 Resume-safe。
@@ -144,6 +145,7 @@ npm publish --access public       # 发布到 npm（默认 registry 不可用时
 ## 兼容性
 
 - 在 DSH 0.2.x 上开发与验证（桌面版 0.2.1-rc.2）。
+- Cursor 侧已在 3.30.14 stable 的 composer 存储上验证列表与单条读取；V1/V3 工具数据两种布局均有单元测试。
 - 包本身零运行时依赖；host 侧使用 Node 内置模块，浏览器侧复用 DSH 平台内置的
   `@deepseek-ai/dsh-client-ui-primitives` 等静态模块。
 
